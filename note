@@ -1,0 +1,15 @@
+Node & Express - Server / back End Technology
+
+basci commands
+----------------------------------------------
+1. create package.json - npm init
+2.install express - nmp i express
+ 
+ basic steps
+ --------------------------------------
+ 1. create package.json
+ 2.install express
+ 3. create index.js file
+ 4.import express
+ 5.server app creation using express
+ 6.set up port number for server
