@@ -46,21 +46,29 @@ const jwtMiddleware = (req,res,next)=>{
 // bank server
 //register API
 app.post('/register',(req,res)=>{
-    //register resolving
-    const result = dataService.register(req.body.username,req.body.acno,req.body.password)
-      res.status(result.statusCode).json(result)
+    //register resolving - asynchronous
+    dataService.register(req.body.username,req.body.acno,req.body.password)
+    .then(result => {
+        res.status(result.statusCode).json(result)
+    })
+     
 })
 //login API
 app.post('/login',(req,res)=>{
     //login resolving
-    const result = dataService.login(req.body.acno,req.body.pswd)
+    dataService.login(req.body.acno,req.body.pswd)
+    .then(result => { 
       res.status(result.statusCode).json(result)
+    })
 })
 //deposit API
 app.post('/deposit',jwtMiddleware,(req,res)=>{
 
-    result=dataService.deposit(req.body.acno,req.body.password,req.body.amt)
-    res.status(result.statusCode).json(result)
+    dataService.deposit(req.body.acno,req.body.password,req.body.amt)
+    .then(result => {
+        res.status(result.statusCode).json(result)
+    })
+    
 })
 // withdraw API
 app.post("/withdraw",jwtMiddleware,(req,res) => {
