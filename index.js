@@ -3,6 +3,8 @@ const express = require('express')
 
 // import jsonwebtoken
 const jwt = require('jsonwebtoken')
+// import cors
+const cors = require('cors')
 
 //import express
 const dataService = require('./services/data.service')
@@ -10,6 +12,11 @@ const dataService = require('./services/data.service')
 
 // server application create using express
 const app = express()
+
+// cors use in server app
+app.use(cors({
+    origin: 'http://localhost:4200'
+}))
 
 // user request resolving
 // parse JSON data
@@ -72,13 +79,18 @@ app.post('/deposit',jwtMiddleware,(req,res)=>{
 })
 // withdraw API
 app.post("/withdraw",jwtMiddleware,(req,res) => {
-    const result = dataService.withdraw(req.body.acno,req.body.password,req.body.amt)
-    res.status(result.statusCode).json(result)
+    dataService.withdraw(req.body.acno,req.body.password,req.body.amt)
+    .then(result => {
+        res.status(result.statusCode).json(result)
+    })
+   
 })
 // transaction API
 app.post('/transaction',jwtMiddleware,(req,res) => {
-    const result = dataService.getTransaction(req.body.acno)
-    res.status(result.statusCode).json(result)
+    dataService.getTransaction(req.body.acno)
+    .then(result => {
+        res.status(result.statusCode).json(result)
+    })
 })
 
 //GET REQUEST - to fetch data

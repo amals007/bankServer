@@ -122,66 +122,65 @@ const deposit = (acno, password, amt) => {
 const withdraw = (acno, password, amt) => {
   var amount = parseInt(amt)
 
-  if (acno in db) {
-    if (password == db[acno]["password"]) {
-      if (db[acno]["balance"] > amount) {
-        db[acno]["balance"] -= amount
-        db[acno].transaction.push({
-          type: "DEBIT",
-          amount: amount
-        })
+  return db.User.findOne({
+    acno,password
+  }).then(user => {
+    if(user){
+      if(user.balance > amount){ 
+      user.balance -= amount
+      user.transaction.push({
+        type: "DEBIT",
+        amount: amount
+    })
+    user.save()
+    return{
+      status: true,
+      message: amount + " debited successfully... New balance is " + user.balance,
+      statusCode: 200
 
-        return {
-          status: true,
-          message: amount + " debited... your balance is " + db[acno]["balance"],
-          statusCode: 200
-        }
-      }
-      else {
-        return {
-          status: false,
-          message: "insufficient balance",
-          statusCode: 422
-        }
-      }
-    }
-    else {
-
-      return {
-        status: false,
-        message: "Incorrect Password",
-        statusCode: 401
-      }
     }
   }
-  else {
-
-    return {
+  else{
+    return{
       status: false,
-      message: "User does not exist ",
+      message: "Insufficient Balance",
       statusCode: 401
     }
   }
+  }
+  else{
+  return { 
+    status: false,
+    message: "Invalid account number or password",
+    statusCode: 401}
+  }
+})
+
 }
 // transaction
 const getTransaction = (acno) => {
-  if (acno in db) {
 
-    return {
-      status: true,
-      statusCode: 200,
-      transaction: db[acno].transaction
+  return db.User.findOne({
+    acno
+  }).then(user =>{
+    if(user){
+      return {
+        status: true,
+        statusCode: 200,
+        transaction: user.transaction
+      }
     }
-  }
-  else {
-    return {
-      status: false,
-      statusCode: 401,
-      message: "user does not exist"
+    else{
+      return{
+        status: false,
+        message: "User does not exist",
+        statusCode: 401
+      }
     }
-
-  }
+  })
 }
+
+
 
 
 //export
