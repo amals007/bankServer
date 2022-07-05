@@ -89,6 +89,15 @@ app.post("/transaction", jwtMiddleware, (req, res) => {
   });
 });
 
+// deleteacc API
+app.delete('/deleteAcc/:acno',jwtMiddleware,(req,res)=>{
+  // delete solving
+  dataService.deleteAcc(req.params.acno)
+  .then(result =>{
+    res.status(result.statusCode).json(result)
+  })
+})
+
 //GET REQUEST - to fetch data
 app.get("/", (req, res) => {
   res.send("GET Request");

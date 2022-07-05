@@ -197,6 +197,26 @@ const getTransaction = (acno) => {
   })
 }
 
+// delete
+const deleteAcc = (acno) =>{
+  return db.User.deleteOne({
+    acno
+  }).then(user=>{
+    if(!user){
+      return{
+        status: false,
+        message:"Operation Failed!!",
+        statusCode: 401
+      }
+    }
+    return{
+      status:true,
+      statusCode:200,
+      message:"Successfully deleted"
+    }
+  })
+}
+
 
 
 
@@ -206,6 +226,7 @@ module.exports = {
   login,
   deposit,
   withdraw,
-  getTransaction
+  getTransaction,
+  deleteAcc
 
 }
